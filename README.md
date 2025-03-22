@@ -1,6 +1,8 @@
-# DataViewer
+# DataViewer for HuggingFace Datasets
 
 A Python package for visualizing Hugging Face datasets using AI-generated Streamlit views. The package uses AI (Claude or GPT-4) to automatically generate custom visualization code for any dataset structure.
+
+*:warning: Warning* At the moment, this project is mainly a playground for evaluating the code generation capabilities of recent large language models. Hence, use the implementation with caution.
 
 ## Installation
 
