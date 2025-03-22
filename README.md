@@ -12,7 +12,7 @@ Here, a few examples of Streamlit Apps automatically generated for Huggingface d
 
 ### SWE Bench (princeton-nlp/SWE-bench)
 
-![SWE-Bench Nice](https://github.com/cedricrupb/dataviewer/blob/main/examples/swebench-nice.png)
+![SWE-Bench Nice](https://github.com/cedricrupb/dataviewer/blob/parse-readme/examples/swebench-nice.png)
 
 
 *NOTE:* Generated with extra prompt: "Create an extra button at the top of the page which redirects directly to the PR on Github. Create an extra button at the top of the page which redirects directly to the PR on Github. Make it as visually appealing as possible. A user should think: 'Wow, this is a nice Streamlit App'." The button is fully functional and shows the original PR on Github.
