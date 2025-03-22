@@ -4,6 +4,20 @@ A Python package for visualizing Hugging Face datasets using AI-generated Stream
 
 *:warning: Warning* At the moment, this project is mainly a playground for evaluating the code generation capabilities of recent large language models. Hence, use the implementation with caution.
 
+## Examples
+Here, a few examples of Streamlit Apps automatically generated for Huggingface datasets (using Claude 3.7 Sonnet).
+
+### MNIST
+![MNSIT Website](https://github.com/cedricrupb/dataviewer/blob/main/examples/mnist.png)
+
+### SWE Bench (princeton-nlp/SWE-bench)
+
+![SWE-Bench 1](https://github.com/cedricrupb/dataviewer/blob/main/examples/swebench.png)
+
+![SWE-Bench 2](https://github.com/cedricrupb/dataviewer/blob/main/examples/swebench2.png)
+
+*NOTE:* Generated with extra prompt: "Create an extra button at the top of the page which redirects directly to the PR on Github. Note to obtain the pull request id you have to parse the instance id. The instance id has the following format: user__repo-pullRequestId." The button is fully functional and shows the original PR on Github.
+
 ## Installation
 
 Clone the repository and install locally:
