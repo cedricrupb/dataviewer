@@ -34,14 +34,40 @@ class DataViewer:
             )
 
     def load_dataset(self, dataset_url):
-        """Load a dataset from Hugging Face.
-        
-        Args:
-            dataset_url (str): Dataset name or path on Hugging Face Hub
-        """
+        """Load a dataset from Hugging Face and its README."""
         self.dataset_name = dataset_url
         self.data = load_dataset(dataset_url)
         
+        # Try to get dataset card/README
+        try:
+            from huggingface_hub import hf_hub_download
+            from pathlib import Path
+            
+            # Try to download README.md or dataset_card.md
+            try:
+                readme_path = hf_hub_download(
+                    repo_id=dataset_url,
+                    filename="README.md",
+                    repo_type="dataset"
+                )
+            except Exception:
+                try:
+                    readme_path = hf_hub_download(
+                        repo_id=dataset_url,
+                        filename="dataset_card.md",
+                        repo_type="dataset"
+                    )
+                except Exception:
+                    readme_path = None
+            
+            if readme_path:
+                self.dataset_readme = Path(readme_path).read_text()
+            else:
+                self.dataset_readme = None
+            
+        except Exception:
+            self.dataset_readme = None
+
     def _clean_code(self, code):
         """Remove markdown code block markers and clean up the code.
         
@@ -100,12 +126,31 @@ class DataViewer:
         sample = self.data[split][0]
         features = {k: str(type(v)) for k, v in sample.items()}
         
-        # Create base prompt with optional extra requirements
+        # Format example instance, handling different data types appropriately
+        def format_value(v):
+            if isinstance(v, (str, int, float, bool)):
+                return str(v)
+            elif isinstance(v, (list, tuple)):
+                return f"[list with {len(v)} elements]"
+            elif isinstance(v, dict):
+                return "{dict with keys: " + ", ".join(v.keys()) + "}"
+            else:
+                return f"[{type(v).__name__}]"
+        
+        example_instance = {k: format_value(v) for k, v in sample.items()}
+        
+        # Create base prompt with optional extra requirements and README
         base_prompt = """Generate a Streamlit Python script to visualize instances from a dataset.
         The script must define a function called 'display_instance' that takes a single parameter 'instance' 
         and visualizes it appropriately.
         
+        Dataset Information:
+        {readme}
+        
         The instance has these features and types: {features}
+        
+        Here's an example instance from the dataset:
+        {example}
         
         Requirements:
         - Create a function called 'display_instance(instance)' that handles the visualization
@@ -115,17 +160,29 @@ class DataViewer:
         - Use st.columns where appropriate for layout
         - Don't include any navigation controls (they're handled elsewhere)
         - Do not include markdown code block markers (```)
+        - Consider the dataset's purpose and content when designing the visualization
+        - Use the example instance as a guide for formatting and layout
         {extra_requirements}
         
         The function will be called with the current instance at the end of the script.
         Only respond with the raw Python code, no explanations."""
 
-        prompt = base_prompt.format(
-            features=json.dumps(features, indent=2),
-            extra_requirements=f"\nAdditional requirements:\n{extra_prompt}" if extra_prompt else ""
+        readme_section = (
+            f"Dataset README:\n{self.dataset_readme}"
+            if self.dataset_readme
+            else "No README available for this dataset."
         )
 
-        system_message = "You are a Python expert specializing in Streamlit and data visualization. Provide only raw Python code without markdown formatting."
+        prompt = base_prompt.format(
+            features=json.dumps(features, indent=2),
+            readme=readme_section,
+            example=json.dumps(example_instance, indent=2),
+            extra_requirements=f"\nAdditional requirements:\n{extra_prompt}" if extra_prompt else ""
+        )
+        
+        system_message = """You are a Python expert specializing in Streamlit and data visualization.
+        Create visualizations that are appropriate for the dataset's purpose and content.
+        Provide only raw Python code without markdown formatting."""
         
         # Generate code using the configured LLM
         viewer_code = self._clean_code(

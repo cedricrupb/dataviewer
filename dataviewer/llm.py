@@ -26,7 +26,7 @@ class Claude(LLMInterface):
     def generate_code(self, prompt: str, system_message: str) -> str:
         response = self.client.messages.create(
             model="claude-3-7-sonnet-20250219",
-            max_tokens=1500,
+            max_tokens=4096,
             temperature=0,
             system=system_message,
             messages=[{"role": "user", "content": prompt}]

@@ -12,11 +12,10 @@ Here, a few examples of Streamlit Apps automatically generated for Huggingface d
 
 ### SWE Bench (princeton-nlp/SWE-bench)
 
-![SWE-Bench 1](https://github.com/cedricrupb/dataviewer/blob/main/examples/swebench.png)
+![SWE-Bench Nice](https://github.com/cedricrupb/dataviewer/blob/main/examples/swebench-nice.png)
 
-![SWE-Bench 2](https://github.com/cedricrupb/dataviewer/blob/main/examples/swebench2.png)
 
-*NOTE:* Generated with extra prompt: "Create an extra button at the top of the page which redirects directly to the PR on Github. Note to obtain the pull request id you have to parse the instance id. The instance id has the following format: user__repo-pullRequestId." The button is fully functional and shows the original PR on Github.
+*NOTE:* Generated with extra prompt: "Create an extra button at the top of the page which redirects directly to the PR on Github. Create an extra button at the top of the page which redirects directly to the PR on Github. Make it as visually appealing as possible. A user should think: 'Wow, this is a nice Streamlit App'." The button is fully functional and shows the original PR on Github.
 
 ## Installation
 
